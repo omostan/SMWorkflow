@@ -1,1 +1,0 @@
-# SMWorkflow - Stateless Machine Workflow

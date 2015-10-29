@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="SMWorkflow.Desktop.Views.SMWorkflowDesktopView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sw="clr-namespace:StanControls.CustomUI;assembly=StanControls"
+             mc:Ignorable="d"
+             d:DesignHeight="500"
+             d:DesignWidth="600"
+             >
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top">
+                <ToolBar Width="Auto"
+                         AlternationCount="2"
+                         >
+                    <MenuItem Header="Settings"/>
+                    <MenuItem Header="Help"/>
+                    <MenuItem Header="About"/>
+                </ToolBar>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom">
+                <Image Width="256"
+               Height="337"
+               Source="../Images/SMWorkflow.png"
+               />
+                <sw:StanButton Content="Go" Margin="0,20,0,0"/>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

@@ -7,9 +7,7 @@ using Stateless;
 
 namespace SMWorkflow.Model
 {
-    using System;
-
-    public class SMWorkflowMachine
+  public class SMWorkflowMachine
   {
     public delegate void UnhandledTriggerDelegate(State state, Trigger trigger);
     public delegate void EntryExitDelegate();
@@ -66,11 +64,10 @@ namespace SMWorkflow.Model
     public GuardClauseDelegate GuardClauseFromServingToServedUsingTriggerReleased = null;
     public UnhandledTriggerDelegate OnUnhandledTrigger = null;
 
-    public SMWorkflowMachine(Action searchAction)
+    public SMWorkflowMachine()
     {
       stateMachine = new StateMachine<State, Trigger>(State.Start);
       stateMachine.Configure(State.Start)
-        .OnEntry(searchAction)
         .OnEntry(() => { if (OnStartEntry != null) OnStartEntry(); })
         .OnExit(() => { if (OnStartExit != null) OnStartExit(); })
         .PermitIf(Trigger.Select, State.Drink , () => { if (GuardClauseFromStartToDrinkUsingTriggerSelect != null) return GuardClauseFromStartToDrinkUsingTriggerSelect(); return true; } )
