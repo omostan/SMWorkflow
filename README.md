@@ -1,2 +1,0 @@
-# SMWorkflow
-Sateless Machine Design
