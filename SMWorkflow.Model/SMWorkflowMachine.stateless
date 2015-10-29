@@ -1,0 +1,42 @@
+<!--  
+Stateless Designer statemachine.
+For more information: http://statelessdesigner.codeplex.com/
+-->
+<statemachine xmlns="http://statelessdesigner.codeplex.com/Schema">
+  <settings>
+    <itemname>SMWorkflowMachine</itemname>
+    <namespace>SMWorkflow.Model</namespace>
+    <class>public</class>
+  </settings>
+  <triggers>     
+    <trigger>Select</trigger>
+    <trigger>Insert</trigger>
+    <trigger>Check</trigger>
+    <trigger>Selected</trigger>
+    <trigger>Accepted</trigger>
+    <trigger>Rejected</trigger>
+    <trigger>Found</trigger>
+    <trigger>NotFound</trigger>
+    <trigger>Released</trigger>
+  </triggers>
+  <states>     
+    <state start="yes">Start</state>
+    <state>Drink</state>
+    <state>Coin</state>
+    <state>Control</state>
+    <state>Search</state>
+    <state>Serving</state>
+    <state>Served</state>
+  </states>
+  <transitions>
+    <transition trigger="Select" from="Start" to="Drink"/>
+    <transition trigger="Selected" from="Drink" to="Search"/>
+    <transition trigger="NotFound" from="Search" to="Drink"/>
+    <transition trigger="Insert" from="Start" to="Coin"/>
+    <transition trigger="Check" from="Coin" to="Control"/>
+    <transition trigger="Rejected" from="Control" to="Coin"/>
+    <transition trigger="Found" from="Search" to="Serving"/>
+    <transition trigger="Accepted" from="Control" to="Serving"/>
+    <transition trigger="Released" from="Serving" to="Served"/>
+  </transitions>
+</statemachine>
