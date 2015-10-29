@@ -112,6 +112,16 @@
   <ItemGroup>
     <Resource Include="Images\SMWorkflow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SMWorkflow.Base\SMWorkflow.Base.csproj">
+      <Project>{3CA7D717-CDDE-4DD6-AC37-285A15B5F81F}</Project>
+      <Name>SMWorkflow.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SMWorkflow.Model\SMWorkflow.Model.csproj">
+      <Project>{0A61FA88-97BA-43B3-8345-A671BF49913E}</Project>
+      <Name>SMWorkflow.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
