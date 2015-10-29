@@ -11,32 +11,38 @@ For more information: http://statelessdesigner.codeplex.com/
   <triggers>     
     <trigger>Select</trigger>
     <trigger>Insert</trigger>
-    <trigger>Check</trigger>
-    <trigger>Selected</trigger>
-    <trigger>Accepted</trigger>
+    <trigger>CheckMoney</trigger>
+    <trigger>SelectedDrink</trigger>
+    <trigger>EnoughMoney</trigger>
     <trigger>Rejected</trigger>
-    <trigger>Found</trigger>
+    <trigger>FoundDrink</trigger>
     <trigger>NotFound</trigger>
-    <trigger>Released</trigger>
+    <trigger>TakeDrink</trigger>
+    <trigger>RefundMoney</trigger>
+    <trigger>TakeChange</trigger>
   </triggers>
   <states>     
-    <state start="yes">Start</state>
-    <state>Drink</state>
-    <state>Coin</state>
-    <state>Control</state>
-    <state>Search</state>
-    <state>Serving</state>
-    <state>Served</state>
+    <state start="yes">Idle</state>
+    <state>SelectDrink</state>
+    <state>CoinBox</state>
+    <state>ControlMoney</state>
+    <state>SearchDrink</state>
+    <state>ServingDrink</state>
+    <state>DrinkReady</state>
+    <state>MoneyRefunded</state>
   </states>
   <transitions>
-    <transition trigger="Select" from="Start" to="Drink"/>
-    <transition trigger="Selected" from="Drink" to="Search"/>
-    <transition trigger="NotFound" from="Search" to="Drink"/>
-    <transition trigger="Insert" from="Start" to="Coin"/>
-    <transition trigger="Check" from="Coin" to="Control"/>
-    <transition trigger="Rejected" from="Control" to="Coin"/>
-    <transition trigger="Found" from="Search" to="Serving"/>
-    <transition trigger="Accepted" from="Control" to="Serving"/>
-    <transition trigger="Released" from="Serving" to="Served"/>
+    <transition trigger="Select" from="Idle" to="SelectDrink"/>
+    <transition trigger="SelectedDrink" from="SelectDrink" to="SearchDrink"/>
+    <transition trigger="NotFound" from="SearchDrink" to="SelectDrink"/>
+    <transition trigger="Insert" from="Idle" to="CoinBox"/>
+    <transition trigger="RefundMoney" from="CoinBox" to="MoneyRefunded"/>
+    <transition trigger="CheckMoney" from="CoinBox" to="ControlMoney"/>
+    <transition trigger="Rejected" from="ControlMoney" to="CoinBox"/>
+    <transition trigger="FoundDrink" from="SearchDrink" to="ServingDrink"/>
+    <transition trigger="EnoughMoney" from="ControlMoney" to="ServingDrink"/>
+    <transition trigger="TakeDrink" from="ServingDrink" to="DrinkReady"/>
+    <transition trigger="TakeChange" from="DrinkReady" to="MoneyRefunded"/>
+    <transition trigger="RefundMoney" from="MoneyRefunded" to="Idle"/>
   </transitions>
 </statemachine>
