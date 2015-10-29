@@ -20,8 +20,8 @@
                 </ToolBar>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom">
-                <Image Width="346"
-               Height="436"
+                <Image Width="356"
+               Height="457"
                Source="../Images/SMWorkflow2.png"
                />
                 <sw:StanButton Content="Go" Margin="0,20,0,0"/>
