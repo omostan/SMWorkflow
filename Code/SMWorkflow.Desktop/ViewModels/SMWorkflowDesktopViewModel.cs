@@ -89,7 +89,7 @@ namespace SMWorkflow.Desktop.ViewModels
                 var drinks = GetDrinks();
                 drinks.ForEach(d => Drinks.Add(d));
 
-                this.smwMachine.TryFireTrigger(SMWorkflowMachine.Trigger.Selected);
+                this.smwMachine.TryFireTrigger(SMWorkflowMachine.Trigger.SelectedDrink);
 
                 if (Drinks.Count > 0)
                 {

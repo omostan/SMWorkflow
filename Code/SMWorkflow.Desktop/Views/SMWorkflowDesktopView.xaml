@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sw="clr-namespace:StanControls.CustomUI;assembly=StanControls"
              mc:Ignorable="d"
-             d:DesignHeight="500"
+             d:DesignHeight="580"
              d:DesignWidth="600"
              >
     <Grid>
@@ -20,9 +20,9 @@
                 </ToolBar>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom">
-                <Image Width="256"
-               Height="337"
-               Source="../Images/SMWorkflow.png"
+                <Image Width="346"
+               Height="436"
+               Source="../Images/SMWorkflow2.png"
                />
                 <sw:StanButton Content="Go" Margin="0,20,0,0"/>
             </StackPanel>

@@ -7,9 +7,9 @@
                xmlns:views="clr-namespace:SMWorkflow.Desktop.Views"
                mc:Ignorable="d"
                Title="Stateless Machine Design"
-               MaxHeight="500"
-               MaxWidth="600"
                WindowStartupLocation="CenterScreen"
+               Height="580"
+               Width="600"
                >
     <Window.Resources>
         <DataTemplate x:Key="SMWorkflowDesktopViewTemplate">

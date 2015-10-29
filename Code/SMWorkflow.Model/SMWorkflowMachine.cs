@@ -22,7 +22,7 @@ namespace SMWorkflow.Model
       EnoughMoney,
       Rejected,
       FoundDrink,
-      NotFound,
+      DeSelectDrink,
       TakeDrink,
       RefundMoney,
       TakeChange,
@@ -34,7 +34,7 @@ namespace SMWorkflow.Model
       SelectDrink,
       CoinBox,
       ControlMoney,
-      SearchDrink,
+      SelectedDrink,
       ServingDrink,
       DrinkReady,
       MoneyRefunded,
@@ -50,8 +50,8 @@ namespace SMWorkflow.Model
     public EntryExitDelegate OnCoinBoxExit = null;
     public EntryExitDelegate OnControlMoneyEntry = null;
     public EntryExitDelegate OnControlMoneyExit = null;
-    public EntryExitDelegate OnSearchDrinkEntry = null;
-    public EntryExitDelegate OnSearchDrinkExit = null;
+    public EntryExitDelegate OnSelectedDrinkEntry = null;
+    public EntryExitDelegate OnSelectedDrinkExit = null;
     public EntryExitDelegate OnServingDrinkEntry = null;
     public EntryExitDelegate OnServingDrinkExit = null;
     public EntryExitDelegate OnDrinkReadyEntry = null;
@@ -60,13 +60,13 @@ namespace SMWorkflow.Model
     public EntryExitDelegate OnMoneyRefundedExit = null;
     public GuardClauseDelegate GuardClauseFromIdleToSelectDrinkUsingTriggerSelect = null;
     public GuardClauseDelegate GuardClauseFromIdleToCoinBoxUsingTriggerInsert = null;
-    public GuardClauseDelegate GuardClauseFromSelectDrinkToSearchDrinkUsingTriggerSelectedDrink = null;
+    public GuardClauseDelegate GuardClauseFromSelectDrinkToSelectedDrinkUsingTriggerSelectedDrink = null;
     public GuardClauseDelegate GuardClauseFromCoinBoxToMoneyRefundedUsingTriggerRefundMoney = null;
     public GuardClauseDelegate GuardClauseFromCoinBoxToControlMoneyUsingTriggerCheckMoney = null;
     public GuardClauseDelegate GuardClauseFromControlMoneyToCoinBoxUsingTriggerRejected = null;
     public GuardClauseDelegate GuardClauseFromControlMoneyToServingDrinkUsingTriggerEnoughMoney = null;
-    public GuardClauseDelegate GuardClauseFromSearchDrinkToSelectDrinkUsingTriggerNotFound = null;
-    public GuardClauseDelegate GuardClauseFromSearchDrinkToServingDrinkUsingTriggerFoundDrink = null;
+    public GuardClauseDelegate GuardClauseFromSelectedDrinkToSelectDrinkUsingTriggerDeSelectDrink = null;
+    public GuardClauseDelegate GuardClauseFromSelectedDrinkToServingDrinkUsingTriggerFoundDrink = null;
     public GuardClauseDelegate GuardClauseFromServingDrinkToDrinkReadyUsingTriggerTakeDrink = null;
     public GuardClauseDelegate GuardClauseFromDrinkReadyToMoneyRefundedUsingTriggerTakeChange = null;
     public GuardClauseDelegate GuardClauseFromMoneyRefundedToIdleUsingTriggerRefundMoney = null;
@@ -84,7 +84,7 @@ namespace SMWorkflow.Model
       stateMachine.Configure(State.SelectDrink)
         .OnEntry(() => { if (OnSelectDrinkEntry != null) OnSelectDrinkEntry(); })
         .OnExit(() => { if (OnSelectDrinkExit != null) OnSelectDrinkExit(); })
-        .PermitIf(Trigger.SelectedDrink, State.SearchDrink , () => { if (GuardClauseFromSelectDrinkToSearchDrinkUsingTriggerSelectedDrink != null) return GuardClauseFromSelectDrinkToSearchDrinkUsingTriggerSelectedDrink(); return true; } )
+        .PermitIf(Trigger.SelectedDrink, State.SelectedDrink , () => { if (GuardClauseFromSelectDrinkToSelectedDrinkUsingTriggerSelectedDrink != null) return GuardClauseFromSelectDrinkToSelectedDrinkUsingTriggerSelectedDrink(); return true; } )
       ;
       stateMachine.Configure(State.CoinBox)
         .OnEntry(() => { if (OnCoinBoxEntry != null) OnCoinBoxEntry(); })
@@ -98,11 +98,11 @@ namespace SMWorkflow.Model
         .PermitIf(Trigger.Rejected, State.CoinBox , () => { if (GuardClauseFromControlMoneyToCoinBoxUsingTriggerRejected != null) return GuardClauseFromControlMoneyToCoinBoxUsingTriggerRejected(); return true; } )
         .PermitIf(Trigger.EnoughMoney, State.ServingDrink , () => { if (GuardClauseFromControlMoneyToServingDrinkUsingTriggerEnoughMoney != null) return GuardClauseFromControlMoneyToServingDrinkUsingTriggerEnoughMoney(); return true; } )
       ;
-      stateMachine.Configure(State.SearchDrink)
-        .OnEntry(() => { if (OnSearchDrinkEntry != null) OnSearchDrinkEntry(); })
-        .OnExit(() => { if (OnSearchDrinkExit != null) OnSearchDrinkExit(); })
-        .PermitIf(Trigger.NotFound, State.SelectDrink , () => { if (GuardClauseFromSearchDrinkToSelectDrinkUsingTriggerNotFound != null) return GuardClauseFromSearchDrinkToSelectDrinkUsingTriggerNotFound(); return true; } )
-        .PermitIf(Trigger.FoundDrink, State.ServingDrink , () => { if (GuardClauseFromSearchDrinkToServingDrinkUsingTriggerFoundDrink != null) return GuardClauseFromSearchDrinkToServingDrinkUsingTriggerFoundDrink(); return true; } )
+      stateMachine.Configure(State.SelectedDrink)
+        .OnEntry(() => { if (OnSelectedDrinkEntry != null) OnSelectedDrinkEntry(); })
+        .OnExit(() => { if (OnSelectedDrinkExit != null) OnSelectedDrinkExit(); })
+        .PermitIf(Trigger.DeSelectDrink, State.SelectDrink , () => { if (GuardClauseFromSelectedDrinkToSelectDrinkUsingTriggerDeSelectDrink != null) return GuardClauseFromSelectedDrinkToSelectDrinkUsingTriggerDeSelectDrink(); return true; } )
+        .PermitIf(Trigger.FoundDrink, State.ServingDrink , () => { if (GuardClauseFromSelectedDrinkToServingDrinkUsingTriggerFoundDrink != null) return GuardClauseFromSelectedDrinkToServingDrinkUsingTriggerFoundDrink(); return true; } )
       ;
       stateMachine.Configure(State.ServingDrink)
         .OnEntry(() => { if (OnServingDrinkEntry != null) OnServingDrinkEntry(); })
