@@ -6,7 +6,12 @@
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
                  <ResourceDictionary Source="/StanControls;component/themes/theme.xaml"/>
-             </ResourceDictionary.MergedDictionaries>
-         </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="2" />
+                <Setter Property="MinHeight" Value="50" />
+                <Setter Property="FontSize" Value="18" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

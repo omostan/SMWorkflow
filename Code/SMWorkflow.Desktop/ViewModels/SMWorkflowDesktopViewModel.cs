@@ -66,6 +66,24 @@
             }
         }
 
+        private DelegateCommand _selectDrinkCommand;
+        public DelegateCommand SelectDrinkCommand
+        {
+            get
+            {
+                return this._selectDrinkCommand;
+            }
+            set
+            {
+                if( this._selectDrinkCommand == value )
+                {
+                    return;
+                }
+                this._selectDrinkCommand = value;
+                this.OnPropertyChanged( "SelectDrinkCommand" );
+            }
+        }
+
         private DelegateCommand _refundMoneyCommand;
         public DelegateCommand RefundMoneyCommand
         {
@@ -125,7 +143,7 @@
             this.UserMessage = "Ready";
             this.DrinkMachine = new SMWorkflowModel();
             this.DrinkMachine.OnTransitioned(this.OnTransitionAction);
-            this.InsertCoinCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.Insert,
+            this.InsertCoinCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.InsertMoney,
                 ( double? param ) =>
                 {
                     var coffeeMachine = this.DrinkMachine;
@@ -134,14 +152,14 @@
                 }, null );
 
             this.RefundMoneyCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.RefundMoney, null, null );
-            this.ServeDrinkCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.FoundDrink, null, null );
+            this.ServeDrinkCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.ServeDrink, null, null );
             this.TakeDrinkCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.TakeDrink, null, null );
             this.DrinkMachine.PropertyChanged += this.DrinkMachineOnPropertyChanged;
         }
 
         private void DrinkMachineOnPropertyChanged( object sender, PropertyChangedEventArgs propertyChangedEventArgs )
         {
-            if( ( propertyChangedEventArgs.PropertyName == "InsertedMoney" || propertyChangedEventArgs.PropertyName == "PreparationProcess" ) )
+            if( ( propertyChangedEventArgs.PropertyName == "InsertedMoney" || propertyChangedEventArgs.PropertyName == "ServingProcess" ) )
             {
                 this.UpdateScreenMessage();
             }
@@ -172,22 +190,12 @@
                         this.UserMessage = "Ready";
                         break;
                     }
-                case SMWMachineState.SelectDrink:
-                    {
-                        this.UserMessage = string.Empty;
-                        break;
-                    }
                 case SMWMachineState.CoinBox:
                     {
                         this.UserMessage = string.Empty;
                         break;
                     }
-                case SMWMachineState.ControlMoney:
-                    {
-                        this.UserMessage = string.Empty;
-                        break;
-                    }
-                case SMWMachineState.SelectedDrink:
+                case SMWMachineState.SelectDrink:
                     {
                         this.UserMessage = string.Empty;
                         break;
@@ -202,7 +210,7 @@
                         this.UserMessage = "Your drink is ready!";
                         break;
                     }
-                case SMWMachineState.MoneyRefunded:
+                case SMWMachineState.RefundMoney:
                     {
                         this.UserMessage = "Refunding money";
                         break;

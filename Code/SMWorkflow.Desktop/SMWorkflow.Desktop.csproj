@@ -49,13 +49,7 @@
       <HintPath>..\..\..\CoffeeMachine\Dependencies\Stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -109,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SMWorkflow.Model\SMWorkflow.Model.csproj">
@@ -119,6 +114,12 @@
   <ItemGroup>
     <Resource Include="Images\SMWorkflow.png" />
     <Resource Include="Images\SMWorkflow2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SMWorkflow3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SMWorkflow4.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,16 +2,12 @@
 {
     public enum SMWMachineTrigger
     {
-        Select,
-        DeselectDrink,
-        Insert,
-        CheckMoney,
-        SelectedDrink,
-        EnoughMoney,
-        Rejected,
-        FoundDrink,
-        TakeDrink,
+        InsertMoney,
         RefundMoney,
-        TakeChange
+        ServeDrink,
+        TakeDrink,
+        EnoughMoney,
+        DrinkServed,
+        MoneyRefunded
     }
 }

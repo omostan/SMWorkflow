@@ -69,22 +69,47 @@
 
         private void ConfigureMachine()
         {
-            this.Configure( SMWMachineState.Idle ).Permit( SMWMachineTrigger.Insert, SMWMachineState.CoinBox );
-            this.Configure( SMWMachineState.Idle ).Permit( SMWMachineTrigger.Select, SMWMachineState.SelectDrink );
-            this.Configure( SMWMachineState.MoneyRefunded ).OnEntry( this.RefundMoney ).Permit( SMWMachineTrigger.RefundMoney, SMWMachineState.Idle );
-            this.Configure( SMWMachineState.SelectedDrink ).OnEntry( this.DeselectDrink ).Permit( SMWMachineTrigger.DeselectDrink, SMWMachineState.SelectDrink );
-            this.Configure( SMWMachineState.CoinBox ).PermitReentry( SMWMachineTrigger.Insert ).Permit( SMWMachineTrigger.RefundMoney, SMWMachineState.MoneyRefunded ).Permit( SMWMachineTrigger.CheckMoney, SMWMachineState.ControlMoney );
-            this.Configure( SMWMachineState.SelectDrink ).PermitReentry( SMWMachineTrigger.Select ).Permit( SMWMachineTrigger.DeselectDrink, SMWMachineState.SelectedDrink ).Permit( SMWMachineTrigger.DeselectDrink, SMWMachineState.SelectDrink );
-            this.Configure( SMWMachineState.ControlMoney ).PermitReentry( SMWMachineTrigger.Insert ).Permit( SMWMachineTrigger.RefundMoney, SMWMachineState.MoneyRefunded ).Permit( SMWMachineTrigger.EnoughMoney, SMWMachineState.ServingDrink );
-            this.Configure( SMWMachineState.SelectedDrink ).PermitReentry( SMWMachineTrigger.Select ).Permit( SMWMachineTrigger.DeselectDrink, SMWMachineState.SelectedDrink ).Permit( SMWMachineTrigger.FoundDrink, SMWMachineState.ServingDrink );
-            this.Configure( SMWMachineState.ServingDrink ).Permit( SMWMachineTrigger.TakeDrink, SMWMachineState.MoneyRefunded );
-            this.Configure( SMWMachineState.DrinkReady ).Permit( SMWMachineTrigger.TakeDrink, SMWMachineState.MoneyRefunded );
+            this.Configure( SMWMachineState.Idle )
+                .Permit( SMWMachineTrigger.InsertMoney, SMWMachineState.CoinBox );
+            this.Configure( SMWMachineState.RefundMoney )
+                .OnEntry( this.RefundMoney )
+                .Permit( SMWMachineTrigger.MoneyRefunded, SMWMachineState.Idle );
+            //this.Configure( SMWMachineState.Idle )
+            //    .Permit( SMWMachineTrigger.Select, SMWMachineState.SelectDrink );
+            this.Configure( SMWMachineState.CoinBox )
+                .PermitReentry( SMWMachineTrigger.InsertMoney )
+                .Permit( SMWMachineTrigger.RefundMoney, SMWMachineState.RefundMoney )
+                //.Permit( SMWMachineTrigger.CheckMoney, SMWMachineState.ControlMoney )
+                .Permit(SMWMachineTrigger.EnoughMoney, SMWMachineState.SelectDrink);
+            this.Configure( SMWMachineState.SelectDrink )
+                .PermitReentry( SMWMachineTrigger.InsertMoney )
+                .Permit( SMWMachineTrigger.RefundMoney, SMWMachineState.RefundMoney )
+                .Permit(SMWMachineTrigger.ServeDrink, SMWMachineState.ServingDrink );
+            this.Configure(SMWMachineState.ServingDrink)
+                .OnEntry(this.ServeDrink)
+                .Permit(SMWMachineTrigger.DrinkServed, SMWMachineState.DrinkReady);
+            this.Configure( SMWMachineState.DrinkReady )
+                .Permit( SMWMachineTrigger.TakeDrink, SMWMachineState.RefundMoney );
             this.OnTransitioned( this.NotisfyStateChanged );
+        }
+
+        private void EnoughMoney()
+        {
+            (new Task(() =>
+                {
+                    const double amount = 0;
+                    var insertedMoney = this;
+                    insertedMoney.InsertedMoney = insertedMoney.InsertedMoney + amount;
+                    if( ( this.State == SMWMachineState.CoinBox && this.InsertedMoney >= 2 ) )
+                    {
+                        this.Fire( SMWMachineTrigger.EnoughMoney );
+                    }
+                } )).Start();
         }
 
         public void InsertCoin(double amount)
         {
-            SMWorkflowModel insertedMoney = this;
+            var insertedMoney = this;
             insertedMoney.InsertedMoney = insertedMoney.InsertedMoney + amount;
             if( (this.State == SMWMachineState.CoinBox && this.InsertedMoney >= 2) )
             {
@@ -99,7 +124,7 @@
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
+            var handler = this.PropertyChanged;
             if( handler != null )
             {
                 handler( this, new PropertyChangedEventArgs( propertyName ) );
@@ -108,15 +133,16 @@
 
         private void ServeDrink()
         {
-            (new Task(() =>
-            {
+            (new Task(() => {
                 this.InsertedMoney = this.InsertedMoney - 2;
-                while( this.ServingProcess <= 100 )
+                while( this.ServingProcess < 100 )
                 {
                     Thread.Sleep( 50 );
                     SMWorkflowModel servingProcess = this;
                     servingProcess.ServingProcess = servingProcess.ServingProcess + 1;
                 }
+                this.ServingProcess = 0;
+                this.Fire(SMWMachineTrigger.DrinkServed);
             })).Start();
         }
 
@@ -125,24 +151,25 @@
             (new Task(() => {
                 while( this.InsertedMoney > 1 )
             {
-                    Thread.Sleep( 2000 );
-                this.InsertedMoney = 0;
-                    this.Fire( SMWMachineTrigger.RefundMoney );
+                    Thread.Sleep( 200 );
+                this.InsertedMoney = this.InsertedMoney - 1;
             }
-        })).Start();
+                this.InsertedMoney = 0;
+                this.Fire( SMWMachineTrigger.MoneyRefunded );
+            } )).Start();
         }
 
-        private void DeselectDrink()
-        {
-            ( new Task( () => {
-                while( this.SelectedDrink > 1 )
-                {
-                    Thread.Sleep( 2000 );
-                    this.SelectedDrink = 0;
-                    this.Fire( SMWMachineTrigger.DeselectDrink );
-                }
-            } ) ).Start();
-        }
+        //private void DeselectDrink()
+        //{
+        //    ( new Task( () => {
+        //        while( this.SelectedDrink > 1 )
+        //        {
+        //            Thread.Sleep( 2000 );
+        //            this.SelectedDrink = 0;
+        //            this.Fire( SMWMachineTrigger.DeselectDrink );
+        //        }
+        //    } ) ).Start();
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
                 

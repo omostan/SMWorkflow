@@ -3,12 +3,10 @@
     public enum SMWMachineState
     {
         Idle,
-            SelectDrink,
-            CoinBox,
-            ControlMoney,
-            SelectedDrink,
-            ServingDrink,
-            DrinkReady,
-            MoneyRefunded
+        CoinBox,
+        SelectDrink,
+        ServingDrink,
+        DrinkReady,
+        RefundMoney
     }
 }

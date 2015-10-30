@@ -3,12 +3,96 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:sw="clr-namespace:StanControls.CustomUI;assembly=StanControls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converter="clr-namespace:SMWorkflow.Desktop.Base.Converter"
+             xmlns:viewModels="clr-namespace:SMWorkflow.Desktop.ViewModels"
+             xmlns:stateMachine="clr-namespace:SMWorkflow.Model.StateMachine;assembly=SMWorkflow.Model"
              mc:Ignorable="d"
-             d:DesignHeight="600"
-             d:DesignWidth="800"
+             d:DesignHeight="900"
+             d:DesignWidth="1020"
              >
+    <UserControl.Resources>
+        <system:Double x:Key="FiveCentsCoin">0.05</system:Double>
+        <system:Double x:Key="TenCentsCoin">0.10</system:Double>
+        <system:Double x:Key="TwentyCentsCoin">0.20</system:Double>
+        <system:Double x:Key="FiftyCentsCoin">0.50</system:Double>
+        <system:Double x:Key="OneEuroCoin">1</system:Double>
+        <system:Double x:Key="TwoEurosCoin">2</system:Double>
+        <converter:StateMachineVisibilityConverter x:Key="StateVisibilityConverter"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <viewModels:SMWorkflowDesktopViewModel/>
+    </UserControl.DataContext>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="187*" />
+            <ColumnDefinition Width="310*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18*" />
+            <RowDefinition Height="25*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF006400" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Label ContentStringFormat=" {0}€" Foreground="#FFF5F5F5" HorizontalContentAlignment="Right" FontSize="20" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Consolas" Content="{Binding DrinkMachine.InsertedMoney}" />
+                    <Label Foreground="#FFF5F5F5" HorizontalContentAlignment="Right" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding UserMessage}" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="0.05 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource FiveCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="0" Grid.Column="1" Content="0.10 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TenCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="1" Grid.Column="0" Content="0.20 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TwentyCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="2" Grid.Column="0" Content="0.50 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource FiftyCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="1" Grid.Column="1" Content="1€" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource OneEuroCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="2" Grid.Column="1" Content="2€" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TwoEurosCoin}" Command="{Binding InsertCoinCommand}" />
+            </Grid>
+            <Button Grid.Row="2" Grid.Column="0" Style="{DynamicResource ButtonStyle}" Content="Refund money" Command="{Binding RefundMoneyCommand}" />
+            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource ButtonStyle}" Command="{Binding ServeDrinkCommand}">Prepare beverage (2€)</Button>
+            <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource ButtonStyle}" Content="Take my beverage!" FocusManager.IsFocusScope="True" Command="{Binding TakeDrinkCommand}" />
+        </Grid>
+        <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+            <Image Source="../Images/SMWorkflow4.png" MaxWidth="1000" MaxHeight="700"/>
+            <Button Name="InIdleInsert" Content="Insert money" Foreground="Aqua" HorizontalAlignment="Left" Height="23" Margin="186,82,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" CommandParameter="{StaticResource FiftyCentsCoin}" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.Idle}}" Command="{Binding InsertCoinCommand}" />
+            <Button Name="InCoinBoxInsert" Content="Insert money" Foreground="Aqua" HorizontalAlignment="Left" Height="23" Margin="235,140,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" CommandParameter="{StaticResource FiftyCentsCoin}" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.CoinBox}}" Command="{Binding InsertCoinCommand}" />
+            <Button Name="InSelectBeverage" Content="" HorizontalAlignment="Left" Height="23" Margin="235,489,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" CommandParameter="{StaticResource FiftyCentsCoin}" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.SelectDrink}}" Command="{Binding InsertCoinCommand}" />
+            <Button Name="InCoinBoxRefund" Content="Refund money" Foreground="Aqua" HorizontalAlignment="Left" Height="23" Margin="45,140,0,0" VerticalAlignment="Top" Width="90" Background="#FF6EA0D3" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.CoinBox}}" Command="{Binding RefundMoneyCommand}" />
+            <Button Name="InCanGetDrinkRefund" Content="" HorizontalAlignment="Left" Height="24" Margin="21,489,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.SelectDrink}}" Command="{Binding RefundMoneyCommand}" />
+            <Button Name="InCanGetDrinkServe" Content="" HorizontalAlignment="Left" Height="23" Margin="186,517,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.SelectDrink}}" Command="{Binding ServeDrinkCommand}" />
+            <Button Name="InTakeDrinkTake" Content="" HorizontalAlignment="Left" Height="23" Margin="522,209,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.DrinkReady}}" Command="{Binding TakeDrinkCommand}" />
+            <Rectangle Name="Idle" HorizontalAlignment="Left" Height="59" Margin="230,1,0,0" Stroke="#FFFF0000" VerticalAlignment="Top" Width="90" StrokeThickness="5" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.Idle}}" />
+            <Rectangle Name="CoinBox" HorizontalAlignment="Left" Height="59" Margin="140,120,0,0" Stroke="#FFFF0000" VerticalAlignment="Top" Width="90" StrokeThickness="5" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.CoinBox}}" />
+            <Rectangle Name="SelectedDrink" HorizontalAlignment="Left" Height="60" Margin="140,225,0,0" Stroke="#FFFF0000" VerticalAlignment="Top" Width="90" StrokeThickness="5" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.SelectDrink}}" />
+            <Ellipse Name="ServingDrink" HorizontalAlignment="Left" Height="59" Margin="106,560,0,0" Stroke="#FFFF0000" VerticalAlignment="Top" Width="90" StrokeThickness="5" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.ServingDrink}}" />
+            <Rectangle Name="TakeDrink" HorizontalAlignment="Left" Height="62" Margin="248,435,0,0" Stroke="#FFFF0000" VerticalAlignment="Top" Width="90" StrokeThickness="5" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.DrinkReady}}" />
+            <Rectangle Name="RefundingMoney" HorizontalAlignment="Left" Height="62" Margin="249,565,0,0" Stroke="#FFFF0000" VerticalAlignment="Top" Width="90" StrokeThickness="5" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.RefundMoney}}" />
+        </Grid>
+        <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
+            <Label FontStyle="Italic" Content="{Binding DrinkMachine.State}" />
+        </StatusBar>
+    </Grid>
+
+
+    <!--<Grid>
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
                 <ToolBar Width="Auto"
@@ -20,10 +104,8 @@
                 </ToolBar>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom">
-                <Image Width="567" Height="795" Source="../Images/SMWorkflow.png"
-               />
-                <sw:StanButton Content="Go" Margin="0,20,0,0"/>
+                <Image Width="400" Height="545" Source="../Images/SMWorkflow3.png"/>
             </StackPanel>
         </DockPanel>
-    </Grid>
+    </Grid>-->
 </UserControl>
