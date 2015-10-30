@@ -6,7 +6,6 @@
 
     using Stateless;
     using System.Threading;
-    using StateMachine;
 
     public sealed class SMWorkflowModel : StateMachine<SMWMachineState, SMWMachineTrigger>, INotifyPropertyChanged
     {

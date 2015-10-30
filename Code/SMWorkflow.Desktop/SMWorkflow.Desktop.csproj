@@ -28,8 +28,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,8 +44,9 @@
     <Reference Include="StanControls">
       <HintPath>..\..\Dependencies\StanControls.dll</HintPath>
     </Reference>
-    <Reference Include="Stateless">
-      <HintPath>..\..\Dependencies\Stateless.dll</HintPath>
+    <Reference Include="Stateless, Version=2.5.21.0, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CoffeeMachine\Dependencies\Stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -67,6 +68,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Base\Commands\StateMachineCommandEx.cs" />
+    <Compile Include="Base\Converter\StateMachineVisibilityConverter.cs" />
+    <Compile Include="Base\Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Base\Properties\Settings.cs" />
+    <Compile Include="ViewModels\SMWorkflowDesktopViewModel.cs" />
     <Compile Include="Views\SMWorkflowDesktopView.xaml.cs">
       <DependentUpon>SMWorkflowDesktopView.xaml</DependentUpon>
     </Compile>
@@ -91,42 +101,22 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="Base\Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SMWorkflow.Base\SMWorkflow.Base.csproj">
-      <Project>{3CA7D717-CDDE-4DD6-AC37-285A15B5F81F}</Project>
-      <Name>SMWorkflow.Base</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SMWorkflow.Model\SMWorkflow.Model.csproj">
       <Project>{0A61FA88-97BA-43B3-8345-A671BF49913E}</Project>
       <Name>SMWorkflow.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\SMWorkflow2.png" />
   </ItemGroup>

@@ -16,22 +16,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\Build\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Stateless">
-      <HintPath>..\Dependencies\Stateless.dll</HintPath>
+      <HintPath>..\..\..\CoffeeMachine\Dependencies\Stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -86,12 +86,6 @@
     <Compile Include="StateMachine\SMWMachineTrigger.cs" />
     <Compile Include="StateMachine\SMWMachineState.cs" />
     <Compile Include="StateMachine\SMWorkflowModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SMWorkflow.Base\SMWorkflow.Base.csproj">
-      <Project>{3CA7D717-CDDE-4DD6-AC37-285A15B5F81F}</Project>
-      <Name>SMWorkflow.Base</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

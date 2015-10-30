@@ -1,126 +1,218 @@
-﻿// -------------------------------------------------------------------------
-// <copyright file="SMWorkflowDesktopViewModel.cs" company="AGI, Novomatic Group.">
-//     Copyright © 2015 Stanley Omoregie. All Rights Reserved.
-// </copyright>
-// -------------------------------------------------------------------------
-
-namespace SMWorkflow.Desktop.ViewModels
+﻿namespace SMWorkflow.Desktop.ViewModels
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
+    using System.ComponentModel;
+    using System.Diagnostics;
 
-    using SMWorkflow.Base;
-    using SMWorkflow.Model;
+    using Base.Commands;
 
-    public class SMWorkflowDesktopViewModel : BindableObject
+    using Model.StateMachine;
+
+    using Microsoft.Practices.Prism.Commands;
+    using Microsoft.Practices.Prism.Mvvm;
+
+    using Stateless;
+
+    public class SMWorkflowDesktopViewModel : BindableBase
     {
-        /// <summary>
-        /// An instance of the ViewModel constructor
-        /// </summary>
-        public SMWorkflowDesktopViewModel()
+        private SMWorkflowModel _drinkMachine;
+        public SMWorkflowModel DrinkMachine
         {
-            this.SelectedDrink = new Drink();
-            this.Drinks = new ObservableCollection<Drink>();
-            this.smwMachine = new SMWorkflowMachine();
-            //InsertCommand = smwMachine.CreateCommand(SMWorkflowMachine.Trigger.Insert);
-            //SelectCommand = smwMachine.SelectCommand(SMWorkflowMachine.Trigger.Select);
-            //CheckCommand = smwMachine.CreateCommand(SMWorkflowMachine.Trigger.Check);
-            Task.Run( () =>
-                    {
-                        GetDrinks();
-                        
-                    });
-        }
-
-        #region Automatic Properties
-
-        public SMWorkflowMachine smwMachine { get; set; }
-
-        public ICommand InsertCommand { get; set; }
-
-        public ICommand SelectCommand { get; set; }
-
-        public ICommand CheckCommand { get; set; }
-
-        public ObservableCollection<Drink> Drinks { get; set; }
-
-        #endregion
-
-
-        #region Bindable SelectedDrink
-
-        private Drink _selectedDrink;
-
-        public Drink SelectedDrink
-        {
-            get
-            {
-                return this._selectedDrink;
-            }
+            get { return this._drinkMachine; }
             set
             {
-                if (value == this._selectedDrink)
+                if (this._drinkMachine == value)
                 {
                     return;
                 }
-                this._selectedDrink = value;
-                this.RaisePropertyChanged("SelectedDrink");
-                this.smwMachine.TryFireTrigger(
-                    value != null ? SMWorkflowMachine.Trigger.Select : SMWorkflowMachine.Trigger.NotFound);
+                this._drinkMachine = value;
+                this.OnPropertyChanged( "DrinkMachine" );
             }
         }
 
-        #endregion
-
-        #region Load drinks
-
-        private async Task LoadDrinks()
+        private DelegateCommand<double?> _insertCoinCommand;
+        public DelegateCommand<double?> InsertCoinCommand
         {
-            try
+            get
             {
-                Drinks.Clear();
-
-                await Task.Delay(2000);
-
-                var drinks = GetDrinks();
-                drinks.ForEach(d => Drinks.Add(d));
-
-                this.smwMachine.TryFireTrigger(SMWorkflowMachine.Trigger.SelectedDrink);
-
-                if (Drinks.Count > 0)
+                return this._insertCoinCommand;
+            }
+            set
+            {
+                if( this._insertCoinCommand == value )
                 {
-                    SelectedDrink = Drinks.First();
+                    return;
                 }
-
-            }
-            catch (Exception)
-            {
-                this.smwMachine.TryFireTrigger(SMWorkflowMachine.Trigger.NotFound);
+                this._insertCoinCommand = value;
+                this.OnPropertyChanged( "InsertCoinCommand" );
             }
         }
 
-        #endregion
-
-        #region Get List of drinks
-
-        private static List<Drink> GetDrinks()
+        private DelegateCommand _serveDrinkCommand;
+        public DelegateCommand ServeDrinkCommand
         {
-            return new List<Drink>()
-                       {
-                           new Drink("Cola", "Beverage", "Coca Cola", "Coca Cola", 2.40),
-                           new Drink("Fanta", "Beverage", "Coca Cola", "Coca Cola", 2.40),
-                           new Drink("Sprite", "Beverage", "Coca Cola", "Coca Cola", 2.40),
-                           new Drink("7up", "Beverage", "Coca Cola", "Coca Cola", 2.40),
-                           new Drink("Beer", "Lager", "Heineken", "Heineken International", 3.20),
-                           new Drink("Beer", "Lager", "Budweiser Light", "Budweiser", 3.60)
-                       };
+            get
+            {
+                return this._serveDrinkCommand;
+            }
+            set
+            {
+                if( this._serveDrinkCommand == value )
+                {
+                    return;
+                }
+                this._serveDrinkCommand = value;
+                this.OnPropertyChanged( "ServeDrinkCommand" );
+            }
         }
 
-        #endregion
+        private DelegateCommand _refundMoneyCommand;
+        public DelegateCommand RefundMoneyCommand
+        {
+            get
+            {
+                return this._refundMoneyCommand;
+            }
+            set
+            {
+                if( this._refundMoneyCommand == value )
+                {
+                    return;
+                }
+                this._refundMoneyCommand = value;
+                this.OnPropertyChanged( "RefundMoneyCommand" );
+            }
+        }
 
+        private DelegateCommand _takeDrinkCommand;
+        public DelegateCommand TakeDrinkCommand
+        {
+            get
+            {
+                return this._takeDrinkCommand;
+            }
+            set
+            {
+                if( this._takeDrinkCommand == value )
+                {
+                    return;
+                }
+                this._takeDrinkCommand = value;
+                this.OnPropertyChanged( "TakeDrinkCommand" );
+            }
+        }
+
+        private string _userMessage;
+        public string UserMessage
+        {
+            get
+            {
+                return this._userMessage;
+            }
+            set
+            {
+                if( string.Equals( this._userMessage, value, StringComparison.Ordinal ) )
+                {
+                    return;
+                }
+                this._userMessage = value;
+                this.OnPropertyChanged( "UserMessage" );
+            }
+        }
+
+        public SMWorkflowDesktopViewModel()
+        {
+            this.UserMessage = "Ready";
+            this.DrinkMachine = new SMWorkflowModel();
+            this.DrinkMachine.OnTransitioned(this.OnTransitionAction);
+            this.InsertCoinCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.Insert,
+                ( double? param ) =>
+                {
+                    var coffeeMachine = this.DrinkMachine;
+                    var nullable = param;
+                    coffeeMachine.InsertCoin( ( nullable.HasValue ? nullable.GetValueOrDefault() : 0 ) );
+                }, null );
+
+            this.RefundMoneyCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.RefundMoney, null, null );
+            this.ServeDrinkCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.FoundDrink, null, null );
+            this.TakeDrinkCommand = this.DrinkMachine.CreateCommand( SMWMachineTrigger.TakeDrink, null, null );
+            this.DrinkMachine.PropertyChanged += this.DrinkMachineOnPropertyChanged;
+        }
+
+        private void DrinkMachineOnPropertyChanged( object sender, PropertyChangedEventArgs propertyChangedEventArgs )
+        {
+            if( ( propertyChangedEventArgs.PropertyName == "InsertedMoney" || propertyChangedEventArgs.PropertyName == "PreparationProcess" ) )
+            {
+                this.UpdateScreenMessage();
+            }
+        }
+
+        private void OnTransitionAction( StateMachine<SMWMachineState, SMWMachineTrigger>.Transition transition )
+        {
+            var source = new object[] { transition.Source, transition.Destination, transition.Trigger };
+            Debug.WriteLine( @"Transition from {0} to {1}, trigger = {2}.", source );
+            this.UpdateScreenMessage();
+            this.RefreshCommands();
+        }
+
+        private void RefreshCommands()
+        {
+            this.InsertCoinCommand.RaiseCanExecuteChanged();
+            this.RefundMoneyCommand.RaiseCanExecuteChanged();
+            this.ServeDrinkCommand.RaiseCanExecuteChanged();
+            this.TakeDrinkCommand.RaiseCanExecuteChanged();
+        }
+
+        private void UpdateScreenMessage()
+        {
+            switch (this.DrinkMachine.State)
+            {
+                case SMWMachineState.Idle:
+                    {
+                        this.UserMessage = "Ready";
+                        break;
+                    }
+                case SMWMachineState.SelectDrink:
+                    {
+                        this.UserMessage = string.Empty;
+                        break;
+                    }
+                case SMWMachineState.CoinBox:
+                    {
+                        this.UserMessage = string.Empty;
+                        break;
+                    }
+                case SMWMachineState.ControlMoney:
+                    {
+                        this.UserMessage = string.Empty;
+                        break;
+                    }
+                case SMWMachineState.SelectedDrink:
+                    {
+                        this.UserMessage = string.Empty;
+                        break;
+                    }
+                case SMWMachineState.ServingDrink:
+                    {
+                        this.UserMessage = string.Format( "Serving drink {0} %...", this.DrinkMachine.ServingProcess );
+                        break;
+                    }
+                case SMWMachineState.DrinkReady:
+                    {
+                        this.UserMessage = "Your drink is ready!";
+                        break;
+                    }
+                case SMWMachineState.MoneyRefunded:
+                    {
+                        this.UserMessage = "Refunding money";
+                        break;
+                    }
+                default:
+                    {
+                        this.UserMessage = "Out of order";
+                        break;
+                    }
+            }
+        }
     }
 }
