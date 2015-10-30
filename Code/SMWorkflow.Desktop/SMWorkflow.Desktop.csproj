@@ -116,8 +116,8 @@
       <Name>SMWorkflow.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <Resource Include="Images\SMWorkflow.png" />
     <Resource Include="Images\SMWorkflow2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,8 +8,8 @@
                mc:Ignorable="d"
                Title="Stateless Machine Design"
                WindowStartupLocation="CenterScreen"
-               Height="580"
-               Width="600"
+               MaxHeight="600"
+               MaxWidth="800"
                >
     <Window.Resources>
         <DataTemplate x:Key="SMWorkflowDesktopViewTemplate">
