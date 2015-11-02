@@ -53,25 +53,25 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <!--<RowDefinition Height="*" />-->
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="0.05 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource FiveCentsCoin}" Command="{Binding InsertCoinCommand}" />
-                <Button Grid.Row="0" Grid.Column="1" Content="0.10 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TenCentsCoin}" Command="{Binding InsertCoinCommand}" />
-                <Button Grid.Row="1" Grid.Column="0" Content="0.20 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TwentyCentsCoin}" Command="{Binding InsertCoinCommand}" />
-                <Button Grid.Row="2" Grid.Column="0" Content="0.50 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource FiftyCentsCoin}" Command="{Binding InsertCoinCommand}" />
-                <Button Grid.Row="1" Grid.Column="1" Content="1€" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource OneEuroCoin}" Command="{Binding InsertCoinCommand}" />
-                <Button Grid.Row="2" Grid.Column="1" Content="2€" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TwoEurosCoin}" Command="{Binding InsertCoinCommand}" />
+                <!--<Button Grid.Row="0" Grid.Column="0" Content="0.05 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource FiveCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="0" Grid.Column="1" Content="0.10 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TenCentsCoin}" Command="{Binding InsertCoinCommand}" />-->
+                <Button Grid.Row="0" Grid.Column="0" Content="0.20 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TwentyCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="1" Grid.Column="0" Content="0.50 €" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource FiftyCentsCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="0" Grid.Column="1" Content="1€" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource OneEuroCoin}" Command="{Binding InsertCoinCommand}" />
+                <Button Grid.Row="1" Grid.Column="1" Content="2€" Style="{DynamicResource ButtonStyle}" CommandParameter="{StaticResource TwoEurosCoin}" Command="{Binding InsertCoinCommand}" />
             </Grid>
             <Button Grid.Row="2" Grid.Column="0" Style="{DynamicResource ButtonStyle}" Content="Refund money" Command="{Binding RefundMoneyCommand}" />
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource ButtonStyle}" Command="{Binding ServeDrinkCommand}">Serve beverage (2€)</Button>
             <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource ButtonStyle}" Content="Take my beverage!" FocusManager.IsFocusScope="True" Command="{Binding TakeDrinkCommand}" />
         </Grid>
         <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
-            <Image Source="../Images/SMWorkflow6.png" MaxWidth="1000" MaxHeight="700"/>
+            <Image Source="../Images/SMWorkflow.png" MaxWidth="1000" MaxHeight="700"/>
             <Button Name="InIdleInsert" Content="Insert money" Foreground="Aqua" HorizontalAlignment="Left" Height="23" Margin="125,110,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" CommandParameter="{StaticResource FiftyCentsCoin}" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.Idle}}" Command="{Binding InsertCoinCommand}" />
             <Button Name="InCoinBoxInsert" Content="Insert money" Foreground="Aqua" HorizontalAlignment="Left" Height="23" Margin="125,110,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" CommandParameter="{StaticResource FiftyCentsCoin}" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.CoinBox}}" Command="{Binding InsertCoinCommand}" />
             <Button Name="InSelectBeverage" Content="Insert money" Foreground="Aqua" HorizontalAlignment="Left" Height="23" Margin="125,110,0,0" VerticalAlignment="Top" Width="76" Background="#FF6EA0D3" CommandParameter="{StaticResource FiftyCentsCoin}" Visibility="{Binding DrinkMachine.State, Converter={StaticResource StateVisibilityConverter}, ConverterParameter={x:Static stateMachine:SMWMachineState.SelectDrink}}" Command="{Binding InsertCoinCommand}" />

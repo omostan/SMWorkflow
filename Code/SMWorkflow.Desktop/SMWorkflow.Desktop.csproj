@@ -113,19 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\SMWorkflow.png" />
-    <Resource Include="Images\SMWorkflow2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\SMWorkflow3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\SMWorkflow4.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\SMWorkflow5.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\SMWorkflow6.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
