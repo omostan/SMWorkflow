@@ -9,7 +9,7 @@
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
                 <Setter Property="Margin" Value="2" />
-                <Setter Property="MinHeight" Value="50" />
+                <Setter Property="MinHeight" Value="30" />
                 <Setter Property="FontSize" Value="18" />
             </Style>
         </ResourceDictionary>
